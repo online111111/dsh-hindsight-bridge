@@ -12,7 +12,7 @@ The implementation was checked against the current upstream source and explicitl
 
 ## Installation
 
-Install the provided local npm tarball:
+Download the installable tarball from [GitHub Release v1.0.0](https://github.com/online111111/dsh-hindsight-bridge/releases/tag/v1.0.0), then run this command in the download directory:
 
 ```sh
 dsh plugin --profile web add ./dsh-hindsight-bridge-1.0.0.tgz
@@ -53,14 +53,26 @@ Important fields are `enabled`, `apiUrl`, `apiKey` / `apiKeyEnv`, `bankId`, `aut
 
 Memory increases model input by up to `maxBlockChars` characters per turn. It is appended to history rather than rewriting the system prompt or earlier messages; repeated tool steps see identical injected bytes.
 
-## Verification and removal
+## Source development verification
+
+Run these commands in a clone of this source repository, not inside the installed tarball. The tarball intentionally excludes test fixtures.
 
 ```sh
+git clone https://github.com/online111111/dsh-hindsight-bridge.git
+cd dsh-hindsight-bridge
 npm ci
 npm test
 npm run check
+npm pack
+```
+
+## Installed profile verification and removal
+
+```sh
 dsh --profile web --dump-config
 dsh plugin --profile web remove dsh-hindsight-bridge
 ```
+
+Do not publish `--dump-config` output: your profile may contain credentials.
 
 Tests use real local HTTP servers, the released Cordis Loader and real DSH agent/session services. Model adapters and Hindsight fixtures are explicitly local test doubles; tests do not write fictitious facts to a production bank. Live service acceptance can be checked through authenticated health/recall reads, followed by an actual user conversation and a completed retain operation.

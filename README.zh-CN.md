@@ -12,7 +12,7 @@
 
 ## 安装
 
-下载附件中的 npm 安装包后，在包所在目录执行：
+从 [GitHub Release v1.0.0](https://github.com/online111111/dsh-hindsight-bridge/releases/tag/v1.0.0) 下载 `dsh-hindsight-bridge-1.0.0.tgz`，在下载目录执行：
 
 ```sh
 dsh plugin --profile web add ./dsh-hindsight-bridge-1.0.0.tgz
@@ -58,14 +58,26 @@ API 地址填写 HTTPS 根地址，不加 `/v1` 或 `/mcp/...`，不要填写管
 
 设置保存走当前 DSH ConfigForms 的原子修改和版本校验。保存失败或被拒绝时保留草稿；发生版本冲突时可显式放弃草稿并加载当前配置，不会静默覆盖其他修改。设置动态变化应用于下一次记忆操作，不改已经提交给服务器的操作目标。
 
-## 验证
+## 源码开发验证
+
+下面命令在克隆的源码仓库中执行，不是在 `.tgz` 安装目录中执行；安装包故意不包含测试夹具。
 
 ```sh
+git clone https://github.com/online111111/dsh-hindsight-bridge.git
+cd dsh-hindsight-bridge
 npm ci
 npm test
 npm run check
+npm pack
+```
+
+## 安装后验证
+
+```sh
 dsh --profile web --dump-config
 ```
+
+仅在本机查看配置，不要公开 `--dump-config` 输出，其中可能包含你填写的凭据。
 
 自动化测试使用真实本地 HTTP 服务、官方 Cordis Loader 和 DSH AgentLoop；模型适配器及 Hindsight 响应是明确标识的本地测试夹具，不是线上结果。线上验收首先只读检查接口和召回，再用真实用户对话检查 retain/consolidation 完成记录；不要把虚构偏好写进生产记忆库。
 
